@@ -21,18 +21,42 @@ public class Database {
     }
 
     public List getCountries() throws Exception {
-        String countries="SELECT country.name FROM country limit 1";
+        String countries="SELECT country.name FROM country";
         PreparedStatement stmt=getConnection().prepareStatement(countries);
         ResultSet rs=stmt.executeQuery();
-        String country;
+
         List<String> list=new ArrayList<>();
         while (rs.next()){
-            country=rs.getString("Name");
-            System.out.println(country);
             list.add(rs.getString("Name"));
         }
 
-        return null;
+        return list;
 
+    }
+
+    public List getCities(String country) throws Exception{
+        String cities="SELECT city.name FROM country JOIN city ON country.code=city.countrycode WHERE country.name LIKE ?";
+        PreparedStatement stmt=getConnection().prepareStatement(cities);
+        stmt.setString(1,country);
+        ResultSet rs=stmt.executeQuery();
+
+        List<String> list=new ArrayList<>();
+        while (rs.next()){
+            list.add(rs.getString("Name"));
+        }
+        return list;
+    }
+
+    public String getPopulation(String city) throws Exception {
+        String cityPop="";
+        String population="SELECT json_extract(info, '$.Population') FROM city WHERE name LIKE ?";
+        PreparedStatement stmt=getConnection().prepareStatement(population);
+        stmt.setString(1,city);
+        ResultSet rs=stmt.executeQuery();
+
+        if (rs.next()){
+            cityPop=rs.getString(1);
+        }
+        return cityPop;
     }
 }
