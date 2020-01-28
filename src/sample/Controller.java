@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class Controller {
@@ -18,6 +19,8 @@ public class Controller {
     public Label lblHumidity;
     public Label lblDistance;
     public Button btnOk;
+    public Label lblCountry;
+    public Label lblCity;
     List countries;
     List<City> city;
     Database db=new Database();
@@ -59,12 +62,23 @@ public class Controller {
         String population=boxCity.getValue();
         for (City s:city){
             if (s.getName().equalsIgnoreCase(population)){
-                lblPopulation.setText(String.valueOf(s.getPopulation()));
+                lblPopulation.setText(formatPopString(s.getPopulation()));
+                lblCity.setText("City: "+s.getName());
+                lblCountry.setText("Country: "+s.getCountryName());
             }
         }
         if (population==null){
             return;
         }
+
+    }
+
+    private String formatPopString(int population) {
+
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        return formatter.format(population);
+
+
 
     }
 }
