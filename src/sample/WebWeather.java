@@ -36,11 +36,12 @@ public class WebWeather {
                 long sunrise=outputObj.getJSONObject("sys").getLong("sunrise");
                 long sunset=outputObj.getJSONObject("sys").getLong("sunset");
                 weather = new Weather(cityName, country, temperature, humidity, lon, lat,distance,sunrise,sunset);
-                return weather;
 
+            } else {
+                throw new NoSuchCityException("City doesnt exists");
             }
             conn.disconnect();
-
+            return weather;
         }  catch (Exception e) {
             e.printStackTrace();
         }
